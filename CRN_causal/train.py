@@ -36,7 +36,7 @@ class Model(object):
 
     def train(self, args):
         # wandb set
-        wandb.init(project=args.project + '/' + args.workspace)
+        wandb.init(project=args.project + '.' + args.workspace)
         wandb.config = {
             "learning_rate": args.lr,
             "epochs": args.max_epoch,
@@ -126,6 +126,12 @@ class Model(object):
                     print()
                     avg_train_loss = accu_train_loss / cnt
                     avg_eval_loss = self.validate(network, cv_batch_dataloader, torch_stft, criterion)
+
+                    wandb.log({"avg_train_loss": avg_train_loss})
+                    wandb.log({"avg_eval_loss": avg_eval_loss})
+                    # Optional
+                    wandb.watch(network)
+
                     is_best = True if avg_eval_loss < best_loss else False
                     best_loss = avg_eval_loss if is_best else best_loss
                     log.info('Epoch [%d/%d], ( TrainLoss: %.4f | EvalLoss: %.4f )' % (
