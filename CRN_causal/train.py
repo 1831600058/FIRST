@@ -17,6 +17,7 @@ from criteria import LossFunction
 from dataloader import TrainDataset, TrainDataLoader, EvalDataset, EvalDataLoader
 from pystoi import stoi
 from pypesq import pesq # 和matlab有0.005左右的差距  pip install https://github.com/vBaiCai/python-pesq/archive/master.zip
+import wandb
 
 sys.path.append(str(Path(os.path.abspath(__file__)).parent.parent))
 from utils.stft import STFT
@@ -34,6 +35,14 @@ class Model(object):
         self.cuda_ids = args.cuda_ids
 
     def train(self, args):
+        # wandb set
+        wandb.init(project=args.project + '/' + args.workspace)
+        wandb.config = {
+            "learning_rate": args.lr,
+            "epochs": args.max_epoch,
+            "batch_size": args.batch_size
+        }
+
         tr_mix_dataset = TrainDataset(args)
         tr_batch_dataloader = TrainDataLoader(tr_mix_dataset, args.batch_size, True, workers_num=args.num_workers)
         cv_mix_dataset = EvalDataset(args, args.eval_file)
@@ -96,6 +105,11 @@ class Model(object):
                 tbar.update_progress(i, 'Train', 'epoch:{}/{}, loss:{:.5f}/{:.5f}, time:{:.3f}/{:.3f}'.format(
                     epoch + 1, args.max_epoch, running_loss, accu_train_loss / cnt, ttime, mtime / cnt))
                 start = time.time()
+
+                wandb.log({"train loss": running_loss})
+                # Optional
+                wandb.watch(network)
+
                 if i % 2000 == 0:
                     mixtures = mixtures.cpu().detach().numpy()
                     labels = labels.cpu().detach().numpy()
@@ -149,6 +163,10 @@ class Model(object):
                 accu_eval_loss += eval_loss
                 cnt += 1.
                 ebar.update_progress(j, 'CV   ', 'loss:{:.5f}/{:.5f}'.format(eval_loss, accu_eval_loss / cnt))
+
+                wandb.log({"eval loss": eval_loss})
+                # Optional
+                wandb.watch(network)
 
             avg_eval_loss = accu_eval_loss / cnt
         print()
@@ -307,7 +325,7 @@ if __name__ == '__main__':
     with open('config.yaml', 'r') as f_yaml:
         config = yaml.load(f_yaml, Loader=yaml.FullLoader)
     config['project'] = _abspath.parent.stem
-    config['workspace'] = _abspath.stem
+    # config['workspace'] = _abspath.stem
     config['resume_model'] = outer_arg.resume_model
 
     args = ConfigArgs(config)
