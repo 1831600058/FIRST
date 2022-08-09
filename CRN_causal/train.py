@@ -16,7 +16,7 @@ from networks import Net
 from criteria import LossFunction
 from dataloader import TrainDataset, TrainDataLoader, EvalDataset, EvalDataLoader
 from pystoi import stoi
-from pypesq import pesq
+from pypesq import pesq # 和matlab有0.005左右的差距  pip install https://github.com/vBaiCai/python-pesq/archive/master.zip
 
 sys.path.append(str(Path(os.path.abspath(__file__)).parent.parent))
 from utils.stft import STFT

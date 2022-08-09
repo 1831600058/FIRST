@@ -17,11 +17,11 @@ num_workers: 8
 
 
 # environment parameter
-speech_file: '/data_zkh/WSJ_datasets/long_wav_same_as_wang.bin'
-noise_file: '/data_zkh/enhancement_data/long_wav.bin'
-eval_file: '/data_zkh/WSJ_datasets/WSJ0_test_samps/test_ADTbabble_snr-5_unseen.samp'
-test_path: '/data_zkh/WSJ_datasets/WSJ0_test_samps/'
+speech_file: '/data02/zhaofei/data/WSJ_datasets/long_wav_same_as_wang.bin'
+noise_file: '/data02/zhaofei/data/enhancement_data_wsj0si84/enhancement_data/long_wav.bin'
+eval_file: '/data02/zhaofei/data/WSJ_datasets/WSJ0_test_samps/test_ADTbabble_snr-5_unseen.samp'
+test_path: '/data02/zhaofei/data/WSJ_datasets/WSJ0_test_samps/'
 #train_lst: '/data_zkh/data_environment/tr_si84.mat'
 #cv_lst: '/home/imu_speech2/zhangkanghao/se-code/CRN_causal/scps/cv_wsj.scp'
-output_dir: '/data_zkh/result/'
+output_dir: '/data02/zhaofei/result/'
 tr_snr: [ -5, -4, -3, -2, -1, 0 ]
