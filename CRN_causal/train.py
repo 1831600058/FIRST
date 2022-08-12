@@ -106,9 +106,9 @@ class Model(object):
                     epoch + 1, args.max_epoch, running_loss, accu_train_loss / cnt, ttime, mtime / cnt))
                 start = time.time()
 
-                wandb.log({"train loss": running_loss})
+                wandb.log({"train loss": running_loss, "epoch": epoch})
                 # Optional
-                wandb.watch(network)
+                # wandb.watch(network)
 
                 if i % 2000 == 0:
                     mixtures = mixtures.cpu().detach().numpy()
@@ -130,7 +130,7 @@ class Model(object):
                     wandb.log({"avg_train_loss": avg_train_loss})
                     wandb.log({"avg_eval_loss": avg_eval_loss})
                     # Optional
-                    wandb.watch(network)
+                    # wandb.watch(network)
 
                     is_best = True if avg_eval_loss < best_loss else False
                     best_loss = avg_eval_loss if is_best else best_loss
@@ -172,7 +172,7 @@ class Model(object):
 
                 wandb.log({"eval loss": eval_loss})
                 # Optional
-                wandb.watch(network)
+                # wandb.watch(network)
 
             avg_eval_loss = accu_eval_loss / cnt
         print()
