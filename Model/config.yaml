@@ -11,8 +11,8 @@ num_train: 320000
 speech_len: 96000
 
 # server setting
-cuda_ids: '1'
-batch_size: 1
+cuda_ids: '2'
+batch_size: 8
 num_workers: 8
 
 
