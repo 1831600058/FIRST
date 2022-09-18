@@ -74,8 +74,14 @@ class Net(nn.Module):
 if __name__ == '__main__':
     input = Variable(torch.FloatTensor(torch.rand(1, 99, 161))).cuda(0)
     net = Net().cuda()
-    macs, params = profile(net, inputs=(input,))
-    macs, params = clever_format([macs, params], "%.3f")
-    print(macs)
-    print(params)
-    print("%s | %.2f | %.2f" % ('elephantstudent', params, macs))
+    # macs, params = profile(net, inputs=(input,))
+    # macs, params = clever_format([macs, params], "%.3f")
+    # print(macs)
+    # print(params)
+    # print("%s | %.2f | %.2f" % ('elephantstudent', params, macs))
+    from ptflops import get_model_complexity_info
+    macs, params = get_model_complexity_info(net, (99, 161))
+    print(macs + " " + params)
+    '''2.5 GMac 17.58 M'''
+
+
