@@ -17,7 +17,7 @@ from criteria import LossFunction
 from dataloader import TrainDataset, TrainDataLoader, EvalDataset, EvalDataLoader
 from pystoi import stoi
 from pypesq import pesq # 和matlab有0.005左右的差距  pip install https://github.com/vBaiCai/python-pesq/archive/master.zip
-import wandb
+# import wandb
 
 sys.path.append(str(Path(os.path.abspath(__file__)).parent.parent))
 from utils.stft import STFT
@@ -36,12 +36,12 @@ class Model(object):
 
     def train(self, args):
         # wandb set
-        wandb.init(project=args.project + '.' + args.workspace)
-        wandb.config = {
-            "learning_rate": args.lr,
-            "epochs": args.max_epoch,
-            "batch_size": args.batch_size
-        }
+        # wandb.init(project=args.project + '.' + args.workspace)
+        # wandb.config = {
+        #     "learning_rate": args.lr,
+        #     "epochs": args.max_epoch,
+        #     "batch_size": args.batch_size
+        # }
 
         tr_mix_dataset = TrainDataset(args)
         tr_batch_dataloader = TrainDataLoader(tr_mix_dataset, args.batch_size, True, workers_num=args.num_workers)
@@ -106,7 +106,7 @@ class Model(object):
                     epoch + 1, args.max_epoch, running_loss, accu_train_loss / cnt, ttime, mtime / cnt))
                 start = time.time()
 
-                wandb.log({"train loss": running_loss, "epoch": epoch})
+                # wandb.log({"train loss": running_loss, "epoch": epoch})
                 # Optional
                 # wandb.watch(network)
 
@@ -127,9 +127,9 @@ class Model(object):
                     avg_train_loss = accu_train_loss / cnt
                     avg_eval_loss = self.validate(network, cv_batch_dataloader, torch_stft, criterion)
 
-                    wandb.log({"avg_train_loss": avg_train_loss})
-                    wandb.log({"avg_eval_loss": avg_eval_loss})
-                    # Optional
+                    # wandb.log({"avg_train_loss": avg_train_loss})
+                    # wandb.log({"avg_eval_loss": avg_eval_loss})
+                    # # Optional
                     # wandb.watch(network)
 
                     is_best = True if avg_eval_loss < best_loss else False
@@ -170,7 +170,7 @@ class Model(object):
                 cnt += 1.
                 ebar.update_progress(j, 'CV   ', 'loss:{:.5f}/{:.5f}'.format(eval_loss, accu_eval_loss / cnt))
 
-                wandb.log({"eval loss": eval_loss})
+                # wandb.log({"eval loss": eval_loss})
                 # Optional
                 # wandb.watch(network)
 
